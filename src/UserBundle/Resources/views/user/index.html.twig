@@ -1,0 +1,32 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <h1>Liste d'utilisateurs</h1>
+    <table>
+        <th>Nom d'utilisateur</th>
+        <th>Email</th>
+        <th>Actions</th>
+        <tbody>
+        {% for user in users %}
+            <tr>
+
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td> <ul>
+                        <li>
+                            <a href="{{ path('user_show', { 'id': user.id }) }}">show</a>
+                        </li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li>
+
+                                <a href="{{ path('user_edit', { 'id': user.id }) }}">edit</a>
+                            </li>
+                        {% endif %}
+                    </ul></td>
+
+            </tr>
+        {% endfor %}
+
+    </table>
+
+{% endblock %}

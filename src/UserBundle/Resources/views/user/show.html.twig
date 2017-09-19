@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Product</h1>
+
+    <table>
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ user.id }}</td>
+        </tr>
+        <tr>
+            <th>Username</th>
+            <td>{{ user.username}}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ user.email}}</td>
+        </tr>
+        <tr>
+            <th>Products</th>
+            {% for product in user.products %}
+            <td><a href="{{ path('product_show', { 'id': product.id })  }}">{{ product }}</a></td>
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+
+
+{% endblock %}

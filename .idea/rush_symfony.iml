@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="PHP" type="php">
+        <CLASSES>
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/composer" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/annotations" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/cache" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/collections" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/common" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/dbal" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/doctrine-bundle" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/doctrine-cache-bundle" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/inflector" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/instantiator" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/lexer" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/orm" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/fig/link-util" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/friendsofsymfony/user-bundle" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/incenteev/composer-parameter-handler" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/jdorn/sql-formatter" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/kriswallsmith/assetic" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/monolog/monolog" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/paragonie/random_compat" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/psr/cache" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/psr/container" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/psr/link" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/psr/log" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/psr/simple-cache" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/sensio/distribution-bundle" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/sensio/framework-extra-bundle" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/sensio/generator-bundle" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/sensiolabs/security-checker" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/swiftmailer/swiftmailer" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/assetic-bundle" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/monolog-bundle" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/phpunit-bridge" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/polyfill-apcu" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/polyfill-intl-icu" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/polyfill-mbstring" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/polyfill-php56" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/polyfill-php70" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/polyfill-util" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/swiftmailer-bundle" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/symfony" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/twig/twig" />
+        </CLASSES>
+        <SOURCES>
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/composer" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/annotations" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/cache" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/collections" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/common" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/dbal" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/doctrine-bundle" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/doctrine-cache-bundle" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/inflector" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/instantiator" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/lexer" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/doctrine/orm" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/fig/link-util" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/friendsofsymfony/user-bundle" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/incenteev/composer-parameter-handler" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/jdorn/sql-formatter" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/kriswallsmith/assetic" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/monolog/monolog" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/paragonie/random_compat" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/psr/cache" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/psr/container" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/psr/link" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/psr/log" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/psr/simple-cache" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/sensio/distribution-bundle" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/sensio/framework-extra-bundle" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/sensio/generator-bundle" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/sensiolabs/security-checker" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/swiftmailer/swiftmailer" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/assetic-bundle" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/monolog-bundle" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/phpunit-bridge" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/polyfill-apcu" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/polyfill-intl-icu" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/polyfill-mbstring" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/polyfill-php56" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/polyfill-php70" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/polyfill-util" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/swiftmailer-bundle" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/symfony" />
+          <root url="file://$USER_HOME$/conf_symfony/demoProj/vendor/twig/twig" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="PHARS">
+        <CLASSES>
+          <root url="phar://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/symfony/src/Symfony/Component/DependencyInjection/Tests/Fixtures/includes/ProjectWithXsdExtensionInPhar.phar/" />
+          <root url="phar://$USER_HOME$/conf_symfony/demoProj/vendor/twig/twig/test/Twig/Tests/Loader/Fixtures/phar/phar-sample.phar/" />
+        </CLASSES>
+        <SOURCES>
+          <root url="phar://$USER_HOME$/conf_symfony/demoProj/vendor/symfony/symfony/src/Symfony/Component/DependencyInjection/Tests/Fixtures/includes/ProjectWithXsdExtensionInPhar.phar/" />
+          <root url="phar://$USER_HOME$/conf_symfony/demoProj/vendor/twig/twig/test/Twig/Tests/Loader/Fixtures/phar/phar-sample.phar/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+  </component>
+</module>
