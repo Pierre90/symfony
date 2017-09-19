@@ -2,11 +2,13 @@
 
 namespace ProductBundle\Controller;
 
+use ProductBundle\Entity\Note_product;
 use ProductBundle\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class ProductController extends Controller
@@ -41,8 +43,7 @@ class ProductController extends Controller
         $product = new Product();
         $form = $this->createForm('ProductBundle\Form\ProductType', $product);
         $form->handleRequest($request);
-        $user = $this->getUser();
-        $product->setUser($user);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -67,12 +68,25 @@ class ProductController extends Controller
     public function showAction(Product $product)
     {
         $deleteForm = $this->createDeleteForm($product);
+        $repository = $this->getDoctrine()->getRepository(Note_product::class);
+        $userNote = "";
+        if($this->getUser())
+        {
+            $userNote = $repository->findOneBy(array("idProduct" => $product->getId(), "idUser" =>$this->getUser()->getId()));
+        }
+        $notes = $product->getAllNotes($repository);
+        $nbVotes = count($notes);
+        $moy = $product->getMoyenne($notes);
 
         return $this->render('ProductBundle::product/show.html.twig', array(
             'product' => $product,
             'delete_form' => $deleteForm->createView(),
+            'nbVotes' => $nbVotes,
+            'userNote' => $userNote,
+            'moyenne' => $moy
         ));
     }
+
 
     /**
      * Displays a form to edit an existing product entity.
@@ -135,5 +149,45 @@ class ProductController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     *  @Route("/{id}/note", name="product_note")
+     */
+    public function noteProductAction(Request $request)
+    {
+        $repository = $this->getDoctrine()->getRepository(Note_product::class);
+
+        $note = $repository->findOneBy(
+            array('idUser' => $request->request->get('id_user'),
+                    'idProduct' => $request->request->get('id_product'))
+        );
+
+        if(!$note)
+        {
+            $note = new Note_product();
+
+            $note->setIdProduct($request->request->get('id_product'));
+            $note->setIdUser($request->request->get('id_user'));
+            $note->setNote($request->request->get('note'));
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($note);
+            $em->flush();
+
+            $repositoryProd =  $this->getDoctrine()->getRepository(Product::class);
+            $product = $repositoryProd->find($request->request->get('id_product'));
+            $notes = $product->getAllNotes($repository);
+            $nbVotes = count($notes);
+            $moy = $product->getMoyenne($notes);
+            $arrData = ["moy"=>$moy, "nbVotes"=>$nbVotes, "note"=>$request->request->get('note')];
+
+        }
+        else
+        {
+            $arrData = ['error' => "Note déjà mise"];
+        }
+
+        return new JsonResponse($arrData);
+
     }
 }

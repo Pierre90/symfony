@@ -10,22 +10,26 @@ namespace ProductBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use AppBundle\Entity\Product;
+use ProductBundle\Entity\Product;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
-class EmailUpdate implements EventSubscriber
+class ProductEvents implements EventSubscriber
 {
     protected $mailer;
+    protected $token;
 
-    public function __construct(\Swift_Mailer $mailer)
+    public function __construct(\Swift_Mailer $mailer, TokenStorage $token)
     {
         $this->mailer = $mailer;
+        $this->token = $token;
     }
 
     public function getSubscribedEvents()
     {
         return array(
-            'postPersist',
+
             'postUpdate',
+            'prePersist'
         );
     }
 
@@ -34,9 +38,16 @@ class EmailUpdate implements EventSubscriber
         $this->index($args);
     }
 
-    public function postPersist(LifecycleEventArgs $args)
+    public function prePersist(LifecycleEventArgs $args)
     {
-        //$this->index($args);
+        $entity = $args->getObject();
+
+        if(!$entity instanceof Product)
+        {
+            return;
+        }
+
+        $entity->setUser($this->token->getToken()->getUser());
     }
 
     public function index(LifecycleEventArgs $args)
@@ -48,8 +59,9 @@ class EmailUpdate implements EventSubscriber
             return;
         }
 
-        $mail = $entity->getUser()->getMail();
-        $message = $this->mailer->createMessage("Product". $object->getName() ." a été modifié");
+        $mail = $entity->getUser()->getEmail();
+        $message = new \Swift_Message("Produit modifié");
+        $message->setBody("Product ". $entity->getTitle() ." a été modifié");
         $this->mailer->send($message, $mail);
     }
 }

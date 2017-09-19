@@ -195,4 +195,25 @@ class Product
     {
         return $this->category;
     }
+
+    public function getAllNotes($repository)
+    {
+       // $repository = $this->getDoctrine()->getRepository(Note_product::class);
+        $notes = $repository->findBy(array("idProduct" => $this->id));
+        return $notes;
+
+    }
+
+    public function getMoyenne($notes)
+    {
+        $moy = 0;
+        foreach($notes as $note)
+        {
+            $moy += $note->getNote();
+        }
+        if(count($notes) != 0)
+            $moy = $moy/count($notes);
+
+        return $moy;
+    }
 }

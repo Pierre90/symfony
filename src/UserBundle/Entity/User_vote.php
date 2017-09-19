@@ -1,16 +1,16 @@
 <?php
 
-namespace ProductBundle\Entity;
+namespace UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Note_product
+ * User_vote
  *
- * @ORM\Table(name="note_product")
- * @ORM\Entity(repositoryClass="ProductBundle\Repository\Note_productRepository")
+ * @ORM\Table(name="user_vote")
+ * @ORM\Entity(repositoryClass="UserBundle\Repository\User_voteRepository")
  */
-class Note_product
+class User_vote
 {
     /**
      * @var int
@@ -24,21 +24,21 @@ class Note_product
     /**
      * @var int
      *
-     * @ORM\Column(name="id_product", type="integer")
+     * @ORM\Column(name="id_voter", type="integer")
      */
-    private $idProduct;
+    private $idVoter;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="id_user", type="integer")
+     * @ORM\Column(name="id_noted", type="integer")
      */
-    private $idUser;
+    private $idNoted;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="note", type="float", scale=2)
+     * @ORM\Column(name="note", type="integer")
      */
     private $note;
 
@@ -54,51 +54,51 @@ class Note_product
     }
 
     /**
-     * Set idProduct
+     * Set idVoter
      *
-     * @param integer $idProduct
+     * @param integer $idVoter
      *
-     * @return Note_product
+     * @return User_vote
      */
-    public function setIdProduct($idProduct)
+    public function setIdVoter($idVoter)
     {
-        $this->idProduct = $idProduct;
+        $this->idVoter = $idVoter;
 
         return $this;
     }
 
     /**
-     * Get idProduct
+     * Get idVoter
      *
      * @return int
      */
-    public function getIdProduct()
+    public function getIdVoter()
     {
-        return $this->idProduct;
+        return $this->idVoter;
     }
 
     /**
-     * Set idUser
+     * Set idNoted
      *
-     * @param integer $idUser
+     * @param integer $idNoted
      *
-     * @return Note_product
+     * @return User_vote
      */
-    public function setIdUser($idUser)
+    public function setIdNoted($idNoted)
     {
-        $this->idUser = $idUser;
+        $this->idNoted = $idNoted;
 
         return $this;
     }
 
     /**
-     * Get idUser
+     * Get idNoted
      *
      * @return int
      */
-    public function getIdUser()
+    public function getIdNoted()
     {
-        return $this->idUser;
+        return $this->idNoted;
     }
 
     /**
@@ -106,7 +106,7 @@ class Note_product
      *
      * @param integer $note
      *
-     * @return Note_product
+     * @return User_vote
      */
     public function setNote($note)
     {

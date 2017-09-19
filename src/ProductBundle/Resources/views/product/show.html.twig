@@ -50,4 +50,82 @@
             {{ form_end(delete_form) }}
         </li>
     </ul>
+
+
+    <div id="nbVotes">Nombre de notes : {{  nbVotes }}</div>
+    <div id="stars"></div>
+    <div id="moyNotes">Moyenne des notes : {{  moyenne }}</div>
+    <diV id="error"></diV>
+    {% if app.user %}
+
+    {% if userNote %}<div id="yourNote">Votre note : {{ userNote.note }}</div>{% endif %}
+
+{%  if userNote %}
+<script>
+    $(function () {
+
+        $("#stars").rateYo({
+            rating: {{ userNote.note }},
+            readOnly: true
+        });
+    });</script>
+    {%  elseif app.user.id == product.user.id %}
+
+      <script>
+          $(function () {
+
+              $("#stars").rateYo({
+                  rating: {{ moyenne }},
+                  readOnly: true
+              });
+          });
+      </script>
+    {% endif %}
+    <script>
+
+        $(function () {
+
+            $("#stars").rateYo({halfStar: true}).on("rateyo.set", function (e, data) {
+                $.ajax({
+                    url:'{{ (path('product_note', { 'id': product.id })) }}',
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        "note": data.rating,
+                        "id_product": {{ product.id }},
+                        "id_user": {{ app.user.id }}
+                    },
+                    async: true,
+                    success: function (data)
+                    {
+                        if(data.error)
+                        {
+                            alert(data.error);
+
+                        }
+                        else
+                        {
+                            $("#stars").rateYo("option", "readOnly", true);
+                            $('div#yourNote').html("Votre note : " + data.note);
+                            $('div#nbVotes').html("Nombre de notes : " + data.nbVotes);
+                            $('div#moyNotes').html("Moyenne des notes : " + data.moy);
+                        }
+
+
+                    }
+                });
+                return false;
+
+            });
+
+        });
+
+        $(document).on('change', 'select#note', function(){
+
+
+
+        });
+    </script>
+    {% endif %}
+
 {% endblock %}

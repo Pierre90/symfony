@@ -85,3 +85,8 @@ easy_admin:
     entities:
         - ProductBundle\Entity\Product
         - ProductBundle\Entity\Category
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~
