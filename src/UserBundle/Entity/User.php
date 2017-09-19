@@ -78,7 +78,7 @@ class User extends BaseUser
     public function setFirstName($firstName)
     {
         $this->firstName = $firstName;
-        return this;
+        return $this;
     }
 
 

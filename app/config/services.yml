@@ -33,4 +33,11 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
-    
+    ProductBundle\EventListener\EmailUpdate:
+        arguments: ['@mailer']
+        tags:
+            - { name: doctrine.event_subscriber, connexion: default }
+    app.form.registration:
+        class: UserBundle\Form\RegistrationType
+        tags:
+            - { name: form.type, alias: app_user_registration }
