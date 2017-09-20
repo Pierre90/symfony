@@ -1,10 +1,11 @@
 
 <header><nav><ul>
-            <li><a href='{{path('homepage')}}'>Home</a></li>
+            <li><a href='{{path('homepage')}}'>Accueil</a></li>
             {% if app.user %}
-            <li><a href='{{path('fos_user_security_logout')}}'>Logout</a></li>
+            <li><a href='{{path('fos_user_security_logout')}}'>Se deconnecter</a></li>
+                <li> <a href='{{path('fos_user_profile_show')}}'>Mon compte</a></li>
             {% else %}
-            <li><a href='{{path('fos_user_security_login')}}'>Login</a></li>
+            <li><a href='{{path('fos_user_security_login')}}'>Se connecter</a></li>
             {% endif %}
         </ul></nav>
 </header>

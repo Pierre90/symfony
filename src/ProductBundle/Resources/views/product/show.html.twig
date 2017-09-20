@@ -41,6 +41,8 @@
         <li>
             <a href="{{ path('product_index') }}">Back to the list</a>
         </li>
+
+        {% if app.user == product.user or is_granted('ROLE_ADMIN')%}
         <li>
             <a href="{{ path('product_edit', { 'id': product.id }) }}">Edit</a>
         </li>
@@ -49,6 +51,7 @@
                 <input type="submit" value="Delete">
             {{ form_end(delete_form) }}
         </li>
+        {% endif %}
     </ul>
 
 
@@ -58,29 +61,29 @@
     <diV id="error"></diV>
     {% if app.user %}
 
-    {% if userNote %}<div id="yourNote">Votre note : {{ userNote.note }}</div>{% endif %}
 
-{%  if userNote %}
-<script>
-    $(function () {
 
-        $("#stars").rateYo({
-            rating: {{ userNote.note }},
-            readOnly: true
-        });
-    });</script>
-    {%  elseif app.user.id == product.user.id %}
+    {%  if userNote %}
+    <script>
+        $(function () {
 
-      <script>
-          $(function () {
+            $("#stars").rateYo({
+                rating: {{ userNote.note }},
+                readOnly: true
+            });
+        });</script>
+        {%  elseif app.user.id == product.user.id %}
 
-              $("#stars").rateYo({
-                  rating: {{ moyenne }},
-                  readOnly: true
+          <script>
+              $(function () {
+
+                  $("#stars").rateYo({
+                      rating: {{ moyenne }},
+                      readOnly: true
+                  });
               });
-          });
-      </script>
-    {% endif %}
+          </script>
+        {% endif %}
     <script>
 
         $(function () {

@@ -19,14 +19,22 @@ class ProductController extends Controller
      * @Route("/", name="product_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $error = "";
+        if($request->query->get('error')=="delete"){
+            $error = "Vous ne pouvez pas supprimer ce produit.";
+        }
+        else if($request->query->get('error')=="edit")
+        {
+            $error = "Vous ne pouvez pas modifier ce produit.";
+        }
         $products = $em->getRepository('ProductBundle:Product')->findAll();
 
         return $this->render('ProductBundle::product/index.html.twig', array(
             'products' => $products,
+            'error' => $error
         ));
     }
 
@@ -97,6 +105,15 @@ class ProductController extends Controller
      */
     public function editAction(Request $request, Product $product)
     {
+        if(!in_array('ROLE_ADMIN', $this->getUser()->getRoles()) && !in_array('ROLE_SUPER_ADMIN', $this->getUser()->getRoles()))
+        {
+            if($product->getUser() != $this->getUser())
+            {
+                return $this->redirectToRoute('product_index',array(
+                    'error' => "edit"));
+
+            }
+        }
         $deleteForm = $this->createDeleteForm($product);
         $editForm = $this->createForm('ProductBundle\Form\ProductType', $product);
         $editForm->handleRequest($request);
@@ -123,11 +140,23 @@ class ProductController extends Controller
      */
     public function deleteAction(Request $request, Product $product)
     {
+        if($product->getUser() != $this->getUser())
+        {
+            return $this->redirectToRoute('product_index',array(
+                'error' => "delete"));
+
+        }
         $form = $this->createDeleteForm($product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $repository = $this->getDoctrine()->getRepository(Note_product::class);
+            $productNotes = $repository->findBy(array("idProduct"=>$product->getId()));
+            foreach($productNotes as $productNote)
+            {
+                $em->remove($productNote);
+            }
             $em->remove($product);
             $em->flush();
         }
@@ -153,6 +182,7 @@ class ProductController extends Controller
 
     /**
      *  @Route("/{id}/note", name="product_note")
+     *  @Security("has_role('ROLE_USER')")
      */
     public function noteProductAction(Request $request)
     {

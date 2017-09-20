@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    {% if error %}
+
+    <div class="error">{{ error }}</div>
+    {% endif %}
     <h1>Products list</h1>
 
     <table>
@@ -33,9 +37,11 @@
                         <li>
                             <a href="{{ path('product_show', { 'id': product.id }) }}">show</a>
                         </li>
+                        {% if app.user == product.user or is_granted('ROLE_ADMIN')%}
                         <li>
                             <a href="{{ path('product_edit', { 'id': product.id }) }}">edit</a>
                         </li>
+                        {% endif %}
                     </ul>
                 </td>
             </tr>
