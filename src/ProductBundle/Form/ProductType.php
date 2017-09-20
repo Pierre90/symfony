@@ -9,6 +9,8 @@ use Symfony\Component\Form\EmbedItemForm;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
+
 class ProductType extends AbstractType
 {
     /**
@@ -16,7 +18,22 @@ class ProductType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('title')->add('description')->add('price')->add('image')->add('category');
+        $builder->add('title')->add('description')->add('price')->add('image')->add('category', Select2EntityType::class, [
+            'multiple' => false,
+            'remote_route' => 'category_search',
+            'class' => 'ProductBundle\Entity\Category',
+            'primary_key' => 'id',
+            'text_property' => 'name',
+            'minimum_input_length' => 1,
+            'page_limit' => 10,
+            'allow_clear' => true,
+            'delay' => 250,
+            'cache' => true,
+            'cache_timeout' => 60000, // if 'cache' is true
+            'language' => 'fr',
+            'placeholder' => 'Select a category',
+            // 'object_manager' => $objectManager, // inject a custom object / entity manager
+        ]);
 
       /*  $builder->add('category',  CategoryType::class, array(
             'required' => FALSE,

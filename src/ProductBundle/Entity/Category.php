@@ -34,6 +34,26 @@ class Category
      * @ORM\OneToMany(targetEntity="ProductBundle\Entity\Product", mappedBy="category")
      */
     private $products;
+
+    /**
+     * @var Category $parent
+     * @ORM\ManyToOne(targetEntity="ProductBundle\Entity\Category")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $parent;
+
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+        return $this;
+    }
+
+
     /**
      * Get id
      *

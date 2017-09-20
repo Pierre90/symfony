@@ -220,4 +220,6 @@ class ProductController extends Controller
         return new JsonResponse($arrData);
 
     }
+
+
 }
