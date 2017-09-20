@@ -18,13 +18,70 @@
             <td>{{ user.email}}</td>
         </tr>
         <tr>
-            <th>Products</th>
-            {% for product in user.products %}
-            <td><a href="{{ path('product_show', { 'id': product.id })  }}">{{ product }}</a></td>
-            {% endfor %}
+            <th>Nom</th>
+            <td>{{ user.lastName}}</td>
+        </tr>
+        <tr>
+            <th>Prénom</th>
+            <td>{{ user.firstName}}</td>
+        </tr>
+        <tr>
+
         </tr>
         </tbody>
     </table>
+
+   <h3> Produits de {{ user.username }}</h3>
+
+        <div class="category_list">
+         Categorie :   <select id="category">
+                <option value="null" selected>Toutes</option>
+                {% for category in categories %}
+                    <option value="{{ category }}">{{ category }}</option>
+
+                {% endfor %}
+            </select>
+        </div>
+        <div class='product_list'>
+            {% for product in user.products %}
+                <div class="{{ product.category|replace({' ':'_'}) }} product">
+                    <a href='{{ path('product_show', { 'id': product.id })  }}'>{{ product }}</a>
+                    <p>{{ product.description }}</p>
+                 </div>
+            {% endfor %}
+        </div>
+
+    <script>
+    $(document).on('change', 'select#category', function(){
+
+        var clas = this.value.replace(' ', '_');
+        if(this.value === "null")
+        {
+            $('.product').show();
+        }
+        else{
+            $(".product:not(."+clas+")").hide();
+            $('.'+clas).show();
+        }
+
+
+    });</script>
+    <ul>
+        <li>
+            <a href="{{ path('user_index') }}">Retourner à la liste</a>
+        </li>
+
+            {% if is_granted('ROLE_ADMIN') %}
+                <li>  <a href="{{  path('user_edit', { 'id' : user.id}) }}">Modifier</a> </li>
+            {% elseif app.user == user%}
+                <li>
+                    <a href='{{path('fos_user_change_password')}}'>Modifier mon mot de passe</a>
+                </li>
+                <li>
+                    <a href='{{path('fos_user_profile_edit')}}'>Modifier mon mes informations</a>
+                </li>
+            {% endif %}
+    </ul>
 
 
 {% endblock %}

@@ -5,8 +5,30 @@
 
     <div class="error">{{ error }}</div>
     {% endif %}
-    <h1>Products list</h1>
+    <h1>Nos produits</h1>
+    <div class="search">
+       Rechercher :
+        <div class="category_list">
+            Par categorie :   <select id="category">
+                <option value="null" selected>Toutes</option>
+                {% for category in categories %}
+                    <option value="{{ category }}">{{ category }}</option>
 
+                {% endfor %}
+            </select>
+
+        </div>
+        <div class="user_list">
+
+            Par utilisateur :   <select id="user">
+                <option value="null" selected>Tous</option>
+                {% for user in users %}
+                    <option value="{{ user }}">{{ user }}</option>
+
+                {% endfor %}
+            </select>
+        </div>
+    </div>
     <table>
         <thead>
             <tr>
@@ -22,13 +44,14 @@
         </thead>
         <tbody>
         {% for product in products %}
-            <tr>
+
+            <tr class="{{ product.category|replace({' ':'_'}) }} product {{ product.user|replace({' ':'_'}) }}">
                 <td><a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.id }}</a></td>
                 <td>{{ product.title }}</td>
                 <td>{{ product.description }}</td>
                 <td>{{ product.price }} €</td>
                 <td>{{ product.image }}</td>
-                <td>{{  product.user  }}</td>
+                <td><a href="{{ path('user_show', { 'id': product.user.id }) }}">{{  product.user  }}</a></td>
                 <td>{{ product.category }}</td>
 
             </td>
@@ -45,6 +68,7 @@
                     </ul>
                 </td>
             </tr>
+
         {% endfor %}
         </tbody>
     </table>
@@ -54,4 +78,60 @@
             <a href="{{ path('product_new') }}">Create a new product</a>
         </li>
     </ul>
+    <script>
+        $(document).on('change', 'select#category', function(){
+
+            var clas = this.value.replace(' ', '_');
+            var selectUser = $('#user').val();
+            var user = selectUser.replace(' ', '_');
+            if(this.value === "null")
+            {
+                $('.product').show();
+
+                if(user != "null")
+                {
+                    $(".product:not(."+user+")").hide();
+                }
+
+            }
+            else{
+                $(".product:not(."+clas+")").hide();
+                $('.'+clas).show();
+
+                if(user != "null")
+                {
+                    $(".product:not(."+user+")").hide();
+                }
+
+            }
+
+
+        });
+
+        $(document).on('change', 'select#user', function(){
+
+            var clas = this.value.replace(' ', '_');
+            var selectCat = $('#category').val();
+            var cat = selectCat.replace(' ', '_');
+            if(this.value === "null")
+            {
+                $('.product').show();
+
+                if(cat != "null")
+                {
+                    $(".product:not(."+cat+")").hide();
+                }
+            }
+            else{
+                $(".product:not(."+clas+")").hide();
+                $('.'+clas).show();
+
+                if(cat != "null")
+                {
+                    $(".product:not(."+cat+")").hide();
+                }
+            }
+
+
+        });</script>
 {% endblock %}

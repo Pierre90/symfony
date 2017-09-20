@@ -24,7 +24,7 @@ class ProductType extends AbstractType
             'class' => 'ProductBundle\Entity\Category',
             'primary_key' => 'id',
             'text_property' => 'name',
-            'minimum_input_length' => 1,
+            'minimum_input_length' => 0,
             'page_limit' => 10,
             'allow_clear' => true,
             'delay' => 250,
@@ -32,7 +32,12 @@ class ProductType extends AbstractType
             'cache_timeout' => 60000, // if 'cache' is true
             'language' => 'fr',
             'placeholder' => 'Select a category',
-            // 'object_manager' => $objectManager, // inject a custom object / entity manager
+            'allow_add' => [
+                'enabled' => true,
+                'new_tag_text' => ' (Créer)',
+                'new_tag_prefix' => '__',
+                'tag_separators' => ''
+            ],
         ]);
 
       /*  $builder->add('category',  CategoryType::class, array(

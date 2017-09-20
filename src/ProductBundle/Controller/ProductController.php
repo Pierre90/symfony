@@ -31,10 +31,13 @@ class ProductController extends Controller
             $error = "Vous ne pouvez pas modifier ce produit.";
         }
         $products = $em->getRepository('ProductBundle:Product')->findAll();
-
+        $categories = $em->getRepository('ProductBundle:Category')->findAll();
+        $users = $em->getRepository('UserBundle:User')->findAll();
         return $this->render('ProductBundle::product/index.html.twig', array(
             'products' => $products,
-            'error' => $error
+            'error' => $error,
+            'categories'=>$categories,
+            'users' => $users
         ));
     }
 

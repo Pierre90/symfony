@@ -31,7 +31,7 @@ class CategoryController extends Controller
             ->setParameter('name', '%'.$toSearch.'%')
             ->getQuery()
             ->getResult();
-       // $categories = $repository->findAll();
+
         $arrResult = [];
         $i=0;
         foreach($categories as $cat)
