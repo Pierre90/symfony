@@ -29,6 +29,21 @@ class Product
     private $id;
 
     /**
+     * @var int
+     * @ORM\Column(name="view", type="integer",options={"default" : 0})
+     */
+    private $views;
+
+    public function getViews()
+    {
+        return $this->views;
+    }
+
+    public function setViews($views)
+    {
+        $this->views = $views;
+    }
+    /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)

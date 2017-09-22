@@ -32,6 +32,22 @@ class User extends BaseUser
      * @var Product $products
      * @ORM\OneToMany(targetEntity="ProductBundle\Entity\Product", mappedBy="user")
      */
+
+    /**
+     * @var int
+     * @ORM\Column(name="view", type="integer",options={"default" : 0})
+     */
+    private $views;
+
+    public function getViews()
+    {
+        return $this->views;
+    }
+
+    public function setViews($views)
+    {
+        $this->views = $views;
+    }
     private $products;
 
     /**

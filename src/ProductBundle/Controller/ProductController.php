@@ -83,6 +83,12 @@ class ProductController extends Controller
      */
     public function showAction(Product $product)
     {
+        $em = $this->getDoctrine()->getManager();
+        $views = $product->getViews();
+        $product->setViews($views + 1);
+        $em->persist($product);
+        $em->flush();
+
         $deleteForm = $this->createDeleteForm($product);
         $repository = $this->getDoctrine()->getRepository(Note_product::class);
         $userNote = "";
@@ -96,6 +102,7 @@ class ProductController extends Controller
         $nbVotes = count($notes);
         $moy = $product->getMoyenne($notes);
         $buyer = $product->getBuyer();
+
         return $this->render('ProductBundle::product/show.html.twig', array(
             'product' => $product,
             'delete_form' => $deleteForm->createView(),
