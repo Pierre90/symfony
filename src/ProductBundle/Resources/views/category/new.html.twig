@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Ajouter un produit</h1>
+    <h1>Ajouter une categorie</h1>
 
     {{ form_start(form) }}
-        {{ form_widget(form) }}
+    {{ form_widget(form) }}
 
-        <input type="submit" value="Créer" />
+    <input type="submit" value="Créer" />
     {{ form_end(form) }}
 
     <ul>
@@ -14,6 +14,5 @@
             <a href="{{ path('product_index') }}">Back to the list</a>
         </li>
     </ul>
-<a href="{{ path('add_category') }}">Ajouter une categorie</a>
 
 {% endblock %}

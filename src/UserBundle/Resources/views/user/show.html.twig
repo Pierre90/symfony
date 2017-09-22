@@ -31,26 +31,49 @@
         </tbody>
     </table>
 
-   <h3> Produits de {{ user.username }}</h3>
+   <h3> Produits en vente de {{ user.username }}</h3>
 
-        <div class="category_list">
-         Categorie :   <select id="category">
-                <option value="null" selected>Toutes</option>
-                {% for category in categories %}
-                    <option value="{{ category }}">{{ category }}</option>
-
-                {% endfor %}
-            </select>
-        </div>
-        <div class='product_list'>
+    <div id="category_list">
+        {% import 'select_category.html.twig' as macros %}
+        Catégorie :  <select id="category">
+            <option value = null selected>Toutes</option>
+            {% for category in categories %}
+                {{ macros.recursiveCategory(category, "") }}
+            {% endfor %}
+        </select>
+    </div>
+        <div class='product_list_sold'>
             {% for product in user.products %}
-                <div class="{{ product.category|replace({' ':'_'}) }} product">
-                    <a href='{{ path('product_show', { 'id': product.id })  }}'>{{ product }}</a>
-                    <p>{{ product.description }}</p>
-                 </div>
+                {% if product.buyer == null %}
+                    <div class="{{ product.category|replace({' ':'_'}) }} product">
+                        <a href='{{ path('product_show', { 'id': product.id })  }}'>{{ product }}</a>
+                        <p>{{ product.description }}</p>
+                     </div>
+                {% endif %}
             {% endfor %}
         </div>
 
+    <h3> Produits vendus par {{ user.username }}</h3>
+    <div class='product_list_sold'>
+        {% for product in user.products %}
+            {% if product.buyer %}
+                <div class="">
+                    <a href='{{ path('product_show', { 'id': product.id })  }}'>{{ product }}</a>
+                    <p>{{ product.description }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <h3> Produits achetés par {{ user.username }}</h3>
+    {% for product in bought %}
+
+            <div class="">
+                <a href='{{ path('product_show', { 'id': product.id })  }}'>{{ product }}</a>
+                <p>{{ product.description }}</p>
+            </div>
+
+    {% endfor %}
     <script>
     $(document).on('change', 'select#category', function(){
 

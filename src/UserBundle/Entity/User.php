@@ -47,17 +47,50 @@ class User extends BaseUser
      */
     private $lastName;
 
+    /** @var Product $boughtProducts
+     *@ORM\OneToMany(targetEntity="ProductBundle\Entity\Product", mappedBy="buyer")
+     */
+    private $boughtProducts;
 
+    /**
+     * @ORM\OneToMany(targetEntity="ProductBundle\Entity\Bid", mappedBy="user")
+     */
+    private $bids;
 
+    public function addBid(\ProductBundle\Entity\Bid $bid)
+    {
+        //$this->products[] = $product;
+
+        if (!$this->bids->contains($bid)) {
+            $this->bids->add($bid);
+        }
+        return $this;
+    }
+
+    public function removeBid(\ProductBundle\Entity\Bid $bid)
+    {
+        $this->products->removeElement($bid);
+    }
+
+    public function getBids()
+    {
+        return $this->bids;
+    }
     public function __construct()
     {
         parent::__construct();
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->bought_products = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getProducts()
     {
         return $this->products;
+    }
+
+    public function getBoughtProducts()
+    {
+    return $this->boughtProducts;
     }
 
     public function getFirstName()

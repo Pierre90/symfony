@@ -4,6 +4,7 @@ namespace ProductBundle\Controller;
 
 use ProductBundle\Entity\Note_product;
 use ProductBundle\Entity\Product;
+use ProductBundle\Entity\Bid;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -31,7 +32,8 @@ class ProductController extends Controller
             $error = "Vous ne pouvez pas modifier ce produit.";
         }
         $products = $em->getRepository('ProductBundle:Product')->findAll();
-        $categories = $em->getRepository('ProductBundle:Category')->findAll();
+        //$categories = $em->getRepository('ProductBundle:Category')->findAll();
+        $categories = $em->getRepository('ProductBundle:Category')->getCategoriesByParent();
         $users = $em->getRepository('UserBundle:User')->findAll();
         return $this->render('ProductBundle::product/index.html.twig', array(
             'products' => $products,
@@ -52,13 +54,16 @@ class ProductController extends Controller
     public function newAction(Request $request)
     {
         $product = new Product();
+
         $form = $this->createForm('ProductBundle\Form\ProductType', $product);
+
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($product);
+
             $em->flush();
 
             return $this->redirectToRoute('product_show', array('id' => $product->getId()));
@@ -81,20 +86,24 @@ class ProductController extends Controller
         $deleteForm = $this->createDeleteForm($product);
         $repository = $this->getDoctrine()->getRepository(Note_product::class);
         $userNote = "";
+        $bid = null;
         if($this->getUser())
         {
             $userNote = $repository->findOneBy(array("idProduct" => $product->getId(), "idUser" =>$this->getUser()->getId()));
         }
+        $bid =$this->getDoctrine()->getRepository(Bid::class)->findOneBy( array('product' => $product->getId()));
         $notes = $product->getAllNotes($repository);
         $nbVotes = count($notes);
         $moy = $product->getMoyenne($notes);
-
+        $buyer = $product->getBuyer();
         return $this->render('ProductBundle::product/show.html.twig', array(
             'product' => $product,
             'delete_form' => $deleteForm->createView(),
             'nbVotes' => $nbVotes,
             'userNote' => $userNote,
-            'moyenne' => $moy
+            'moyenne' => $moy,
+            'bid'=>$bid,
+            'buyer'=>$buyer
         ));
     }
 
@@ -222,6 +231,33 @@ class ProductController extends Controller
 
         return new JsonResponse($arrData);
 
+    }
+
+    /**
+     *  @Route("/buy", name="buy_now")
+     *  @Security("has_role('ROLE_USER')")
+     *  @Method({"POST"})
+     */
+    public function buyNowAction(Request $request)
+    {
+
+        $id_product = $request->request->get('id_product');
+
+        $em = $this->getDoctrine()->getManager();
+
+        $product = $em->getRepository(Product::class)->find($id_product);
+        $product->setBuyer($this->getUser());
+       // $bids = $em->getRepository(Bid::class)->findAll();
+        foreach($product->getBids() as $bid)
+        {
+            $em->remove($bid);
+           
+        }
+        $em->persist($product);
+        $em->flush();
+
+        //Set le buyer et rajouter des if dans le show twig pour mettre vendu a la place du systeme d'enchère
+        return new JSONResponse(array("buyer"=>$this->getUser()->getUserName()));
     }
 
 

@@ -10,4 +10,18 @@ namespace ProductBundle\Repository;
  */
 class CategoryRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getCategoriesByParent(Category $parent = null)
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->orderBy('c.name', 'ASC');
+
+        if (is_null($parent)) {
+            $qb->andWhere('c.parent IS NULL');
+        } else {
+            $qb->andWhere('c.parent = :parent')
+                ->setParameter('parent', $parent->getId());
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

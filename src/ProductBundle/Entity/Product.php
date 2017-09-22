@@ -3,6 +3,8 @@
 namespace ProductBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Product
@@ -12,6 +14,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Product
 {
+    public function __construct()
+    {
+
+        $this->products = new \Doctrine\Common\Collections\ArrayCollection();
+    }
     /**
      * @var int
      *
@@ -36,14 +43,7 @@ class Product
     private $description;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="price", type="integer")
-     */
-    private $price;
-    /**
      * @var string
-     *
      * @ORM\Column(name="image", type="string", length=255)
      */
     private $image;
@@ -62,6 +62,125 @@ class Product
      */
     private $category;
 
+
+    /**
+     * @var integer
+     * @ORM\Column(name="startingPrice", type="integer")
+     * @Assert\Range(min=1)
+     */
+    private $startingPrice;
+
+    public function getStartingPrice()
+    {
+        return $this->startingPrice;
+    }
+
+    public function setStartingPrice($startingPrice)
+    {
+        $this->startingPrice = $startingPrice;
+        return $this;
+    }
+    /**
+     * @var integer
+     * @ORM\Column(name="minimumBid", type="integer")
+     * @Assert\Range(min=1)
+     */
+    private $minimumBid;
+
+    public function getMinimumBid()
+    {
+        return $this->minimumBid;
+    }
+
+    public function setMinimumBid($minimumBid)
+    {
+        $this->minimumBid = $minimumBid;
+        return $this;
+    }
+    /**
+     * @var integer
+     * @ORM\Column(name="maximumBid", type="integer", nullable= true)
+     * @Assert\Range(min=1)
+     */
+    private $maximumBid;
+
+    public function getMaximumBid()
+    {
+        return $this->maximumBid;
+    }
+
+    public function setMaximumBid($maximumBid)
+    {
+        $this->maximumBid = $maximumBid;
+        return $this;
+    }
+    /**
+     * @var integer
+     * @ORM\Column(name="endDate", type="date", nullable=true)
+     * @Assert\LessThanOrEqual("+1 month")
+     * @Assert\GreaterThanOrEqual("+1 day")
+     */
+    private $endDate;
+
+    public function getEndDate()
+    {
+        return $this->endDate;
+    }
+
+    public function setEndDate($endDate)
+    {
+        $this->endDate = $endDate;
+        return $this;
+    }
+    /**
+     * @var User $buyer
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="boughtProducts", cascade="persist" )
+     * @ORM\JoinColumn(onDelete="SET NULL")
+     */
+    private $buyer;
+
+    public function getBuyer()
+    {
+        return $this->buyer;
+    }
+
+    public function setBuyer($buyer)
+    {
+        $this->buyer = $buyer;
+        return $this;
+    }
+    /**
+    * @ORM\OneToMany(targetEntity="Bid", mappedBy="product")
+     */
+    private $bids;
+
+    public function addBid(\ProductBundle\Entity\Bid $bid)
+    {
+        //$this->products[] = $product;
+
+        if (!$this->bids->contains($bid)) {
+            $this->bids->add($bid);
+        }
+        return $this;
+    }
+
+    public function removeBid(\ProductBundle\Entity\Bid $bid)
+    {
+        $this->bids->removeElement($bid);
+    }
+
+    public function removeAllBids()
+    {
+        foreach($this->bids as $bid)
+        {
+            $this->removeBid($bid);
+        }
+    }
+
+    public function getBids()
+    {
+        return $this->bids;
+    }
     /**
      * Get id
      *
@@ -72,17 +191,7 @@ class Product
         return $this->id;
     }
 
-    public function getPrice()
-    {
-        return $this->price;
-    }
 
-    public function setPrice($price)
-    {
-        $this->price = $price;
-
-        return $this;
-    }
     /**
      * Set title
      *
@@ -182,7 +291,7 @@ class Product
     public function setCategory(\ProductBundle\Entity\Category $category = null)
     {
         $this->category = $category;
-
+        $category->addProduct($this);
         return $this;
     }
 
@@ -215,5 +324,26 @@ class Product
             $moy = $moy/count($notes);
 
         return $moy;
+    }
+
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+
+        // check if the name is actually a fake name
+        if ($this->maximumBid != null && ($this->maximumBid < $this->startingPrice+$this->minimumBid) )
+        {
+            $context->buildViolation('Le prix d\' doit être supérieur au prix de départ plus l\'enchère minimum.')
+                ->atPath('maximumBid')
+                ->addViolation();
+        }
+        if($this->endDate == null && $this->maximumBid == null)
+        {
+            $context->buildViolation('Vous devez renseigner soit un prix d\'achat soit une date de fin pour l\'enchère')
+                ->atPath('maximumBid')
+                ->addViolation();
+        }
     }
 }

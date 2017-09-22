@@ -1,0 +1,21 @@
+{% macro recursiveCategory(category, nested) %}
+
+    {% import _self as recursiveCategoryMacro %}
+
+    {% if category.children|length %}
+
+         <option value="{{ category }}" class="parent">
+        {{ nested }}{{ category }}
+        {% set nested = nested ~ '─' %}
+        {% for child in category.children %}
+
+            {{ recursiveCategoryMacro.recursiveCategory(child, nested) }}
+
+        {% endfor %}
+    {% else %}
+        <option value="{{ category }}">
+        {{ nested }}{{ category }}
+    {% endif %}
+    </option>
+{% endmacro %}
+

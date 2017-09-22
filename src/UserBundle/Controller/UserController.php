@@ -61,10 +61,12 @@ class UserController extends Controller
     public function showAction(User $user)
     {
         $em = $this->getDoctrine()->getManager();
-        $cat = $em->getRepository('ProductBundle:Category')->findAll();
+        $categories = $em->getRepository('ProductBundle:Category')->getCategoriesByParent();
+        $bought = $em->getRepository('ProductBundle:Product')->findBy(array('buyer'=>$user));
         return $this->render('UserBundle::user/show.html.twig', array(
             'user' => $user,
-            'categories' => $cat
+            'categories' => $categories,
+            'bought'=> $bought
 
         ));
     }

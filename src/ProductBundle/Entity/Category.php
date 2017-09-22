@@ -37,10 +37,19 @@ class Category
 
     /**
      * @var Category $parent
-     * @ORM\ManyToOne(targetEntity="ProductBundle\Entity\Category")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity="ProductBundle\Entity\Category", inversedBy="children")
+     * @ORM\JoinColumn(nullable=true, onDelete="cascade")
      */
     private $parent;
+
+    /**
+     * @var Category $children
+     * @ORM\OneToMany(targetEntity="ProductBundle\Entity\Category", mappedBy="parent")
+     */
+    private $children;
+    /**
+     * @return Category
+     */
 
     public function getParent()
     {
@@ -98,6 +107,7 @@ class Category
     public function __construct()
     {
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -109,8 +119,11 @@ class Category
      */
     public function addProduct(\ProductBundle\Entity\Product $product)
     {
-        $this->products[] = $product;
+        //$this->products[] = $product;
 
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+        }
         return $this;
     }
 
@@ -132,5 +145,21 @@ class Category
     public function getProducts()
     {
         return $this->products;
+    }
+
+    public function addChildren(\ProductBundle\Entity\Category $children)
+    {
+        $this->children[] = $children;
+    }
+
+    public function removeChildren(\ProductBundle\Entity\Category $children)
+    {
+        $this->children->removeElement($children);
+
+    }
+
+    public function getChildren()
+    {
+        return $this->children;
     }
 }

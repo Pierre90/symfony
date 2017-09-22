@@ -37,6 +37,11 @@ services:
         arguments: ['@mailer','@security.token_storage']
         tags:
             - { name: doctrine.event_subscriber, connexion: default }
+
+    ProductBundle\EventListener\BidEvents:
+        arguments: ['@security.token_storage']
+        tags:
+            - { name: doctrine.event_subscriber, connexion: default }
     app.form.registration:
         class: UserBundle\Form\RegistrationType
         tags:

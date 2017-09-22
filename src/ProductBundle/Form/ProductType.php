@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class ProductType extends AbstractType
 {
@@ -18,7 +19,10 @@ class ProductType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('title')->add('description')->add('price')->add('image')->add('category', Select2EntityType::class, [
+        $builder->add('title', null,array('label' => 'Titre'))
+            ->add('description', null,array('label' => 'Description'))
+            ->add('image', null,array('label' => 'Image'))
+            ->add('category', Select2EntityType::class, [
             'multiple' => false,
             'remote_route' => 'category_search',
             'class' => 'ProductBundle\Entity\Category',
@@ -31,14 +35,21 @@ class ProductType extends AbstractType
             'cache' => true,
             'cache_timeout' => 60000, // if 'cache' is true
             'language' => 'fr',
-            'placeholder' => 'Select a category',
+            'placeholder' => 'Choisir une categorie...',
+            'label' => 'Catégorie',
             'allow_add' => [
                 'enabled' => true,
                 'new_tag_text' => ' (Créer)',
                 'new_tag_prefix' => '__',
                 'tag_separators' => ''
             ],
-        ]);
+        ])
+        ->add('startingPrice', null,array('label' => 'Prix de départ'))
+            ->add('minimumBid', null,array('label' => 'Enchère minimum'))
+            ->add('maximumBid', null,array('label' => 'Prix d\'achat immédiat', 'required'=>false))
+            ->add('endDate', DateType::class,array('label' => 'Date fin des enchères', 'required'=>false, 'placeholder' => array(
+                'year' => 'Année', 'month' => 'Mois', 'day' => 'Jour'),'format' => 'dd-MM-yyyy'))
+        ;
 
       /*  $builder->add('category',  CategoryType::class, array(
             'required' => FALSE,
