@@ -7,3 +7,28 @@
     <p> <li> <a href='{{path('fos_user_change_password')}}'>Modifier mon mot de passe</a></li></p>
     <p> <li> <a href='{{path('fos_user_profile_edit')}}'>Modifier mon mes informations</a></li></p>
 </div>
+<h3>Vos enchères :</h3>
+<div class="bid_list">
+
+    {% for bid in user.bids %}
+    <div>{{ bid.product }}</div>
+    {% endfor %}
+</div>
+<h3>Vos produits vendus :</h3>
+<div class="bid_list">
+
+    {% for product in user.products %}
+        {% if product.buyer %}
+         <div>{{ product }}</div>
+        {% endif %}
+    {% endfor %}
+</div>
+<h3>Vos produits en vente :</h3>
+<div class="bid_list">
+
+    {% for product in user.products %}
+        {% if product.buyer == null %}
+            <div>{{ product }}</div>
+        {% endif %}
+    {% endfor %}
+</div>
