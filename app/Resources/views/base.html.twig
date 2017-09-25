@@ -4,13 +4,14 @@
         <meta charset="UTF-8" />
         <title>{% block title %}MyEbay{% endblock %}</title>
         {% block stylesheets %}
-            <script
-                    src="https://code.jquery.com/jquery-3.2.1.js">
-            </script>
-            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
 
-
+            <script
+                    src="https://code.jquery.com/jquery-3.2.1.js"
+                    integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+                    crossorigin="anonymous"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
 
             <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
@@ -18,15 +19,34 @@
             <script src="{{ asset('bundles/tetranzselect2entity/js/select2entity.js') }}"></script>
         {% endblock %}
 
+        {% stylesheets '@AppBundle/Resources/css/general_style.css' filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url}}" />
+        {% endstylesheets %}
+
     </head>
     <body>
     {% block header %}{{ include('header.html.twig') }}{% endblock %}
-        {% block body %}{% endblock %}
+    <div class="page">
+
+    <div class="row">
+            <div class="col-3 left_container">
+                {% block search %}
+                {% endblock %}
+            </div>
+            <div class="col-9 main">
+            {% block body %}{% endblock %}
+            </div>
+        </div>
+    </div>
         {% block javascripts %}
 
 
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 
         {% endblock %}
+
+
     </body>
+
 </html>

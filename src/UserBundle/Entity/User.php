@@ -32,7 +32,7 @@ class User extends BaseUser
      * @var Product $products
      * @ORM\OneToMany(targetEntity="ProductBundle\Entity\Product", mappedBy="user")
      */
-
+    private $products;
     /**
      * @var int
      * @ORM\Column(name="view", type="integer",options={"default" : 0})
@@ -48,7 +48,7 @@ class User extends BaseUser
     {
         $this->views = $views;
     }
-    private $products;
+
 
     /**
      *

@@ -9,6 +9,7 @@ imports:
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: fr
+    images_directory: '%kernel.project_dir%/web/uploads/images'
 
 framework:
     #esi: ~
@@ -41,6 +42,8 @@ twig:
     strict_variables: '%kernel.debug%'
     form_themes:
          - 'TetranzSelect2EntityBundle:Form:fields.html.twig'
+         - 'bootstrap_3_layout.html.twig'
+
 
 # Doctrine Configuration
 doctrine:
@@ -95,3 +98,4 @@ assetic:
     use_controller: '%kernel.debug%'
     filters:
         cssrewrite: ~
+

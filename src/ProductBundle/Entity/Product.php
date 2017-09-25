@@ -50,6 +50,7 @@ class Product
      */
     private $title;
 
+
     /**
      * @var string
      *
@@ -60,6 +61,7 @@ class Product
     /**
      * @var string
      * @ORM\Column(name="image", type="string", length=255)
+     *
      */
     private $image;
 

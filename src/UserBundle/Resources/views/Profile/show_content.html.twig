@@ -2,35 +2,89 @@
 
 
 <div class="fos_user_user_show">
-    <p>{{ 'profile.show.username'|trans }}: {{ user.username }}</p>
-    <p>{{ 'profile.show.email'|trans }}: {{ user.email }}</p>
-    <p> <li> <a href='{{path('fos_user_change_password')}}'>Modifier mon mot de passe</a></li></p>
-    <p> <li> <a href='{{path('fos_user_profile_edit')}}'>Modifier mon mes informations</a></li></p>
+    <h1><p> {{ user.username }}</p></h1>
+    <p><b>{{ 'profile.show.email'|trans }}: </b>{{ user.email }}</p>
+    <p> <b>Prénom :</b> {{ user.firstName }}</p>
+    <p> <b>Nom :</b> {{ user.lastName }}</p>
 </div>
-<div class="profile_views">Votre profile a été consulté {{ user.views }} fois</div>
-<h3>Vos enchères :</h3>
-<div class="bid_list">
+<div class="profile_views"><b>Votre profile a été consulté {{ user.views }} fois</b></div>
 
-    {% for bid in user.bids %}
-    <div>{{ bid.product }}</div>
-    {% endfor %}
-</div>
-<h3>Vos produits vendus :</h3>
-<div class="bid_list">
 
-    {% for product in user.products %}
-        {% if product.buyer %}
-         <div>{{ product }}</div>
-        {% endif %}
-    {% endfor %}
-</div>
-<h3>Vos produits en vente :</h3>
-<div class="bid_list">
+<div id="accordion" role="tablist">
+    <div class="card">
+        <div class="card-header" role="tab" id="headingOne">
+            <h5 class="mb-0">
+                <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Vos enchères en cours
+                </a>
+            </h5>
+        </div>
 
-    {% for product in user.products %}
-        {% if product.buyer == null %}
-            <div>{{ product }}</div>
-            <div class="product_views">Nombre de vues du produit : {{ product.views }}</div>
-        {% endif %}
-    {% endfor %}
+        <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                {% for bid in user.bids %}
+                    <div>{{ bid.product }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" role="tab" id="headingTwo">
+            <h5 class="mb-0">
+                <a class="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Vos produits vendus
+                </a>
+            </h5>
+        </div>
+        <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body">
+                {% for product in user.products %}
+                    {% if product.buyer %}
+                        <div>  <a href='{{ path('product_show', { 'id': product.id })  }}'>{{ product }}</a></div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" role="tab" id="headingThree">
+            <h5 class="mb-0">
+                <a class="collapsed" data-toggle="collapse" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Vos produits en vente
+                </a>
+            </h5>
+        </div>
+        <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+                {% for product in user.products %}
+                    {% if product.buyer == null %}
+                        <div>  <a href='{{ path('product_show', { 'id': product.id })  }}'>{{ product }}</a></div>
+                        <div class="product_views">Nombre de vues du produit : {{ product.views }}</div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" role="tab" id="headingThree">
+            <h5 class="mb-0">
+                <a class="collapsed" data-toggle="collapse" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Vos produits achetés
+                </a>
+            </h5>
+        </div>
+        <div id="collapseFour" class="collapse" role="tabpanel" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+                {% for product in user.boughtProducts %}
+
+                        <div>  <a href='{{ path('product_show', { 'id': product.id })  }}'>{{ product }}</a></div>
+                        <div class="product_views">Nombre de vues du produit : {{ product.views }}</div>
+
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
+
+<p> <li> <a href='{{path('fos_user_change_password')}}'>Modifier mon mot de passe</a></li></p>
+<p> <li> <a href='{{path('fos_user_profile_edit')}}'>Modifier  mes informations</a></li></p>

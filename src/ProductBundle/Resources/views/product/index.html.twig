@@ -1,5 +1,35 @@
 {% extends 'base.html.twig' %}
 
+{% block search %}
+
+<div class="search">
+    Rechercher :
+    <div id="category_list">
+        {% import 'select_category.html.twig' as macros %}
+        Par catégorie :  <select id="category" class="custom-select">
+            <option value = null selected>Toutes</option>
+            {% for category in categories %}
+                {{ macros.recursiveCategory(category, "") }}
+            {% endfor %}
+        </select>
+    </div>
+    <div class="user_list">
+
+        Par utilisateur :   <select id="user" class="custom-select">
+            <option value="null" selected>Tous</option>
+            {% for user in users %}
+                <option value="{{ user }}">{{ user }}</option>
+
+            {% endfor %}
+        </select>
+    </div>
+</div>
+    <ul>
+        <li>
+            <a href="{{ path('product_new') }}">Ajouter une vente</a>
+        </li>
+    </ul>
+    {% endblock %}
 {% block body %}
 
 
@@ -7,82 +37,44 @@
 
     <div class="error">{{ error }}</div>
     {% endif %}
+    <div class="products_container">
     <h1>Nos produits</h1>
 
 
+        <div class="card-deck product_list">
+            {% for product in products %}
 
-    <div class="search">
-       Rechercher :
-        <div id="category_list">
-            {% import 'select_category.html.twig' as macros %}
-            Par catégorie :  <select id="category">
-                <option value = null selected>Toutes</option>
-                {% for category in categories %}
-                    {{ macros.recursiveCategory(category, "") }}
-                {% endfor %}
-            </select>
-        </div>
-        <div class="user_list">
+                {% if product.buyer == null %}
 
-            Par utilisateur :   <select id="user">
-                <option value="null" selected>Tous</option>
-                {% for user in users %}
-                    <option value="{{ user }}">{{ user }}</option>
+                    <div class="card {{ product.category|replace({' ':'_'}) }} product {{ product.user|replace({' ':'_'}) }}" style="max-width: 20rem;">
+                            <a href="{{ path('product_show', { 'id': product.id }) }}">
+                                <img class="card-img-top img-fluid" src="{{ asset('uploads/images/' ~ product.image) }}" alt="Card image cap">
 
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Titre</th>
-                <th>Description</th>
+                            </a>
 
-                <th>Image</th>
-                <th>User</th>
-                <th>Categories</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for product in products %}
+                        <div class="card-body">
+                            <h4 class="card-title"><a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.title }}</a></h4>
+                            <h5 class="category-text"> {{ product.category }}</h5>
+                            <p class="card-text">{{ product.description }}</p>
 
-            {% if product.buyer == null %}
-                <tr class="{{ product.category|replace({' ':'_'}) }} product {{ product.user|replace({' ':'_'}) }}">
-                    <td><a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.id }}</a></td>
-                    <td>{{ product.title }}</td>
-                    <td>{{ product.description }}</td>
-
-                    <td>{{ product.image }}</td>
-                    <td><a href="{{ path('user_show', { 'id': product.user.id }) }}">{{  product.user  }}</a></td>
-                    <td>{{ product.category }}</td>
-
-
-                    <td>
-                        <ul>
-                            <li>
-                                <a href="{{ path('product_show', { 'id': product.id }) }}">show</a>
-                            </li>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Vendu par <a href="{{ path('user_show', { 'id': product.user.id }) }}">{{ product.user }}</a></small>
                             {% if app.user == product.user or is_granted('ROLE_ADMIN')%}
-                            <li>
-                                <a href="{{ path('product_edit', { 'id': product.id }) }}">edit</a>
-                            </li>
-                            {% endif %}
-                        </ul>
-                    </td>
-                </tr>
-        {% endif %}
-        {% endfor %}
-        </tbody>
-    </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('product_new') }}">Create a new product</a>
-        </li>
-    </ul>
+                                <br> <small class="text-muted"> <a href="{{ path('product_edit', { 'id': product.id }) }}">Modifier</a></small>
+
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+                {% endif %}
+            {% endfor %}
+        </div>
+
+
+
     <script>
         $(document).on('change', 'select#category', function(){
 

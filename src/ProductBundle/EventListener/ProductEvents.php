@@ -51,6 +51,7 @@ class ProductEvents implements EventSubscriber
         {
             $entity->setEndDate(new \DateTime('+1 month'));
         }
+        $entity->setViews(0);
         $entity->setUser($this->token->getToken()->getUser());
     }
 

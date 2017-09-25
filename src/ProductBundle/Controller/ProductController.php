@@ -61,6 +61,23 @@ class ProductController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+
+            /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
+            $file = $product->getImage();
+
+            // Generate a unique name for the file before saving it
+            $fileName = md5(uniqid()).'.'.$file->guessExtension();
+
+            // Move the file to the directory where images are stored
+            $file->move(
+                $this->getParameter('images_directory'),
+                $fileName
+            );
+
+            // Update the 'image' property to store the image file name
+            // instead of its contents
+            $product->setImage($fileName);
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($product);
 

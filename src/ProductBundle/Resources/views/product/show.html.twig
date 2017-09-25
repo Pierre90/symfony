@@ -1,73 +1,102 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<div class="row">
+    <div class="col-5">
     <h1>{{ product.title }}</h1>
+        <div class="card" style="width: 20rem;">
+            <img class="card-img-top" src="{{ asset('uploads/images/' ~ product.image) }}" alt="Card image cap">
+            <div class="card-body">
+                <h4 class="card-title">{{ product.title }}</h4>
+                <p class="card-text">{{ product.description }}</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><h5 class="category-text"> {{ product.category }}</h5></li>
+                <li class="list-group-item">Vendu par <a href="{{ path('user_show', { 'id': product.user.id }) }}">{{ product.user }}</a></li>
 
-    <table>
-        <tbody>
+            </ul>
+            <div class="card-body">
+                <ul>
 
-
-            <tr>
-                <th>Description</th>
-                <td>{{ product.description }}</td>
-            </tr>
-
-            <tr>
-                <th>Image</th>
-                <td>{{ product.image }}</td>
-            </tr>
-            <tr>
-                <th>Category</th>
-                <td>{{  product.category }}</td>
-            </tr>
-            <tr>
-                <th>Vendeur</th>
-                <td><a href="{{ path('user_show', { 'id': product.user.id }) }}">{{ product.user }}</a></td>
-
-        </tbody>
-    </table>
-
-    {% if bid %}
-        {% set value = bid.bid %}
-    {% else %}
-        {% set value = product.startingPrice %}
-    {% endif %}
-    {% if buyer %}
-        <div class="sold">Acheté par <a href="{{  path('user_show', { 'id': buyer.id }) }}">{{ buyer }}</a></div>
-    {% else %}
-    <div class="bid_container">
-
-        <div class="current_bid">
-            Offre en cours : <span id="value">{{ value }} €</span>
+                    {% if app.user == product.user or is_granted('ROLE_ADMIN')%}
+                        <li>
+                            <a href="{{ path('product_edit', { 'id': product.id }) }}">Edit</a>
+                        </li>
+                        <li>
+                            {{ form_start(delete_form) }}
+                            <input type="submit" value="Delete">
+                            {{ form_end(delete_form) }}
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-
-        <div class="add_bid">
-            <input id="new_bid" type="number" value="{{ value }}" step="{{ product.minimumBid }}" min="{{ value }}" max="{{ product.maximumBid }}" />
-            <button type="button" id='bid_button' class="btn btn-primary">Enchérir</button>
-        </div>
-        {% if product.maximumBid %}
-        <div class="buy">
-            <div class="price_immediate">Prix d'achat immédiat : {{ product.maximumBid }} €</div>
-            <button type="button" id="buy_button" class="btn btn-primary">Achat immédiat</button>
-        </div>
-        {% endif %}
-        {% if product.endDate %}
-            <div class="date_bid">Date de fin : {{ product.endDate|date("d/m/y H:m", "Europe/Paris") }}</div>
-        {% endif %}
 
     </div>
-{% endif %}
+    <div class="col-7">
+        <div class="bid_systeme">
+        {% if bid %}
+            {% set value = bid.bid %}
+        {% else %}
+            {% set value = product.startingPrice %}
+        {% endif %}
+        {% if buyer %}
+            <div class="sold">Acheté par <a href="{{  path('user_show', { 'id': buyer.id }) }}">{{ buyer }}</a></div>
+        {% else %}
+            <div class="bid_container">
+
+                <div class="current_bid">
+                    Offre en cours : <span id="value">{{ value }} €</span>
+                </div>
+
+                {% if app.user.id is defined %}
+                    <div class="add_bid">
+                        <input id="new_bid" type="number" value="{{ value }}" step="{{ product.minimumBid }}" min="{{ value }}" max="{{ product.maximumBid }}" />
+                        <button type="button" id='bid_button' class="btn btn-primary">Enchérir</button>
+                    </div>
+                    {% if product.maximumBid %}
+                        <div class="buy">
+                            <div class="price_immediate">Prix d'achat immédiat : {{ product.maximumBid }} €</div>
+                            <button type="button" id="buy_button" class="btn btn-primary">Achat immédiat</button>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                {% if product.endDate %}
+                    <div class="date_bid">Date de fin : {{ product.endDate|date("d/m/y H:m", "Europe/Paris") }}</div>
+                {% endif %}
+
+            </div>
+        {% endif %}
+        </div>
+        <div class="container_note">
+            <div id="nbVotes">Nombre de notes : {{  nbVotes }}</div>
+            <div id="stars" "></div>
+            <div id="moyNotes">Moyenne des notes : {{  moyenne }}</div>
+            <diV id="error"></div>
+        </div>
+    </div>
+
+</div>
+    {% if app.user.id is not defined %}
+        {% set id_user = 0 %}
+
+    {% else %}
+        {% set id_user = app.user.id %}
+    {% endif %}
     <script>
 
         var buy = function()
         {
+            if( {{ id_user }} != 0)
+            {
             $.ajax({
                 url:'{{ path('buy_now')}}',
                 type: "POST",
                 dataType: "json",
                 data: {
                     "id_product": {{ product.id }},
-                    "id_user": {{ app.user.id }}
+                    "id_user": {{ id_user }}
                 },
                 async: true,
                 success: function (data)
@@ -84,41 +113,48 @@
                     }
                 }
             });
+        }
+
+
         };
 
         $("#bid_button").click( function()
             {
-                $.ajax({
-                    url:'{{ path('new_bid')}}',
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        "bid": $("#new_bid").val(),
-                        "id_product": {{ product.id }},
-                        "id_user": {{ app.user.id }}
-                    },
-                    async: true,
-                    success: function (data)
-                    {
-                        if(data.error)
+                if( {{ id_user }} != 0)
+                {
+                    $.ajax({
+                        url:'{{ path('new_bid')}}',
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            "bid": $("#new_bid").val(),
+                            "id_product": {{ product.id }},
+                            "id_user": {{ id_user }}
+                        },
+                        async: true,
+                        success: function (data)
                         {
-                            alert(data.error);
+                            if(data.error)
+                            {
+                                alert(data.error);
 
-                        }
-                        else if(data.buy)
-                        {
-                            var r = confirm("Prix maximum dépassé : confirmez vous l'achat du produit ?");
-                            if (r === true) {
-                                buy();
+                            }
+                            else if(data.buy)
+                            {
+                                var r = confirm("Prix maximum dépassé : confirmez vous l'achat du produit ?");
+                                if (r === true) {
+                                    buy();
+                                }
+                            }
+                            else
+                            {
+
+                                $("#value").html(data.bid);
                             }
                         }
-                        else
-                        {
+                    });
+                }
 
-                            $("#value").html(data.bid);
-                        }
-                    }
-                });
             }
         );
 
@@ -127,53 +163,39 @@
     </script>
 
 
-    <ul>
-        <li>
-            <a href="{{ path('product_index') }}">Back to the list</a>
-        </li>
 
-        {% if app.user == product.user or is_granted('ROLE_ADMIN')%}
-        <li>
-            <a href="{{ path('product_edit', { 'id': product.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-        {% endif %}
-    </ul>
+    {% if app.user.id is not defined %}
+        <script>
+            $(function () {
 
+                $("#stars").rateYo({
+                    rating: {{ moyenne }},
+                    readOnly: true
+                });
+            });</script>
+        {%  elseif userNote %}
+        <script>
+            $(function () {
 
-    <div id="nbVotes">Nombre de notes : {{  nbVotes }}</div>
-    <div id="stars"></div>
-    <div id="moyNotes">Moyenne des notes : {{  moyenne }}</div>
-    <diV id="error"></diV>
-    {% if app.user %}
+                $("#stars").rateYo({
+                    rating: {{ userNote.note }},
+                    readOnly: true
+                });
+            });</script>
 
+            {%  elseif app.user.id == product.user.id %}
 
+              <script>
+                  $(function () {
 
-    {%  if userNote %}
-    <script>
-        $(function () {
-
-            $("#stars").rateYo({
-                rating: {{ userNote.note }},
-                readOnly: true
-            });
-        });</script>
-        {%  elseif app.user.id == product.user.id %}
-
-          <script>
-              $(function () {
-
-                  $("#stars").rateYo({
-                      rating: {{ moyenne }},
-                      readOnly: true
+                      $("#stars").rateYo({
+                          rating: {{ moyenne }},
+                          readOnly: true
+                      });
                   });
-              });
-          </script>
-        {% endif %}
+              </script>
+
+{% else %}
     <script>
 
         $(function () {
